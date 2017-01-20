@@ -15,8 +15,8 @@ public class SpaceStationScript : MonoBehaviour
 	// Update is called once per frame
 	// Do not adjust rigidbodies or colliders etc. in this method!
 	void Update () {
-		// HandleMouseInput();
-		HandleKeyboardInput();
+		 HandleMouseInput();
+	//	HandleKeyboardInput();
 	}
 
 	void HandleKeyboardInput()
