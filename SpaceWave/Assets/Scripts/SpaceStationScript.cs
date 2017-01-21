@@ -14,7 +14,8 @@ public class SpaceStationScript : MonoBehaviour
 
     public float lives;
     float currentlife;
-
+    public AudioClip hitAudio;
+    public AudioClip deadSound;
     public Image livesValueImage;
 
     // Use this for initialization
@@ -82,13 +83,13 @@ public class SpaceStationScript : MonoBehaviour
         // Get target angle to mouse pointer
         targetAngle = Mathf.Atan2(transform.position.y - mousePoint.y, transform.position.x - mousePoint.x) + Mathf.PI / 2f;
     }
-
+    public Rect windowRect = new Rect(20, 20, 120, 50);
 
     void OnCollisionEnter2D(Collision2D other)
     {
         //Debug.Log("collided!!!!");
         currentlife -= 10;
-
+        AudioSource.PlayClipAtPoint(hitAudio,transform.position);
         float percent = currentlife / lives;
         livesValueImage.fillAmount = percent;
 
@@ -111,16 +112,19 @@ public class SpaceStationScript : MonoBehaviour
         if (currentlife <= 0)
         {
             //game over
+            AudioSource.PlayClipAtPoint(deadSound,transform.position);
+          
         }
         //print (currentColor);
 
 
     }
 
+
     // FixedUpdate is called once per physics tick
     // Do ALL physics based calls inside THIS method!!
 
-    
+
     void FixedUpdate()
     {
         //float angle = transform.eulerAngles.z * Mathf.Deg2Rad;

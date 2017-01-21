@@ -7,7 +7,7 @@ public class AsteroidScript : MonoBehaviour
     public float initialLife = 100f;
     public float healthBarXScaleAtMax = 7.5f;
     public Vector3 healthBarOffset = new Vector3(0, 4, 0);
-
+    public AudioClip explosion;
     public GameObject resources;
 
     private float life;
@@ -53,7 +53,7 @@ public class AsteroidScript : MonoBehaviour
         if (life < 0)
         {
             
-
+            AudioSource.PlayClipAtPoint(explosion,transform.position);
             Destroy(healthBar);
             Destroy(gameObject);
 
