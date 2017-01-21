@@ -52,26 +52,34 @@ public class MainScript : MonoBehaviour
         {
             //default, for destroy non-resource asteroids
             waveType = 1;
-            Debug.Log("press 1" + waveType);
+      //      Debug.Log("press 1" + waveType);
         }
 
         else if (Input.GetKeyDown("2"))
         {
             // for destroy resource ones
             waveType = 2;
-            Debug.Log("press 2" + waveType);
+     //       Debug.Log("press 2" + waveType);
         }
 
         else if (Input.GetKeyDown("3"))
         {
             //for collect the resource (drag inside while the wave hit resources (and asteroids?)
             waveType = 3;
-            Debug.Log("press 3 "+waveType);
+      //      Debug.Log("press 3 "+waveType);
         }
+        
 
         return waveType;
     }
-    
+
+    void UpdateResource()
+    {
+        scoreValueText.GetComponent<Text>().text = "Score: " + ScoreManager.score;
+        resourcesValueText.GetComponent<Text>().text = "Resources: "+ScoreManager.Resource;
+        
+    }
+
     // Update is called once per frame
     void Update ()
     {
@@ -88,16 +96,19 @@ public class MainScript : MonoBehaviour
             Vector2 stationPos = station.transform.position;
             Vector2 rotateVector = station.transform.rotation * (Vector2.up);
 
-            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius;
+            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius*station.transform.localScale.x;
 
            
             GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
 
             newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
-            
+
+            newWave.GetComponent<WaveScript>().waveType = index + 1;
+       //     Debug.Log("wave type "+newWave.GetComponent<WaveScript>().waveType);
+
             Color whateverColor = colors[index];
 
-            Debug.Log(whateverColor);
+         //   Debug.Log(whateverColor);
 
             SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
 
@@ -143,12 +154,32 @@ public class MainScript : MonoBehaviour
             //Spawn in the screen but not too close to center
             // Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
 
-            Instantiate(asteroid, spawnPos, Quaternion.identity);
-           // Debug.Log("oh no an asteroid");
+            GameObject aste = (GameObject)Instantiate(asteroid, spawnPos, Quaternion.identity);
+
+            float type = UnityEngine.Random.value;
+            int index2;
+            if (type > 0.5)
+            {
+                index2 = 0;
+                aste.GetComponent<AsteroidScript>().asteroidType = 1;
+            }
+
+            else
+            {
+                index2 = 1;
+                aste.GetComponent<AsteroidScript>().asteroidType = 2;
+            }
+
+            Color whateverColor = colors[index2];
+
+            SpriteRenderer gameObjectRenderer = aste.GetComponent<SpriteRenderer>();
+
+            gameObjectRenderer.material.color = whateverColor;
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
-
+            
         }
+        UpdateResource();
     }
 
 }

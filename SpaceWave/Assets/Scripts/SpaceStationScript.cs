@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class SpaceStationScript : MonoBehaviour
 {
     public float turningSpeed = 5.0f;
@@ -12,9 +12,15 @@ public class SpaceStationScript : MonoBehaviour
 
     public Boolean clicking;
 
+    public float lives;
+    float currentlife;
+
+    public Image livesValueImage;
+
     // Use this for initialization
     void Start()
     {
+        currentlife = lives;
     }
 
     // Update is called once per frame
@@ -77,8 +83,44 @@ public class SpaceStationScript : MonoBehaviour
         targetAngle = Mathf.Atan2(transform.position.y - mousePoint.y, transform.position.x - mousePoint.x) + Mathf.PI / 2f;
     }
 
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        //Debug.Log("collided!!!!");
+        currentlife -= 10;
+
+        float percent = currentlife / lives;
+        livesValueImage.fillAmount = percent;
+
+        Debug.Log(percent + " " + livesValueImage.fillAmount);
+
+        Color currentColor = livesValueImage.color;
+
+        if (percent > 0.65f)
+        {
+            livesValueImage.color = new Color(currentColor.r + 0.1f / 0.35f, currentColor.g, 0, 1);
+        }
+        else if (percent <= 0.65f && percent > 0.30f)
+        {
+            livesValueImage.color = new Color(1, currentColor.g - 0.1f / 0.35f, 0, 1);
+        }
+        else if (percent < -0.3f)
+        {
+            livesValueImage.color = new Color(1, 0, 0, 1);
+        }
+        if (currentlife <= 0)
+        {
+            //game over
+        }
+        //print (currentColor);
+
+
+    }
+
     // FixedUpdate is called once per physics tick
     // Do ALL physics based calls inside THIS method!!
+
+    
     void FixedUpdate()
     {
         //float angle = transform.eulerAngles.z * Mathf.Deg2Rad;

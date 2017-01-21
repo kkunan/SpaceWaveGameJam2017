@@ -8,17 +8,20 @@ public class AsteroidScript : MonoBehaviour
     public float healthBarXScaleAtMax = 7.5f;
     public Vector3 healthBarOffset = new Vector3(0, 4, 0);
 
+    public GameObject resources;
+
     private float life;
     public GameObject healthBarPrefab;
     private GameObject healthBar;
+
+    public int asteroidType;
 
     // Use this for initialization
     void Start()
     {
         life = initialLife;
         healthBar = GameObject.Instantiate(healthBarPrefab);
-
-
+        
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         Vector2 position = gameObject.transform.position;
 
@@ -26,7 +29,7 @@ public class AsteroidScript : MonoBehaviour
         //random velocity
         // rb.AddForce(new Vector2(UnityEngine.Random.Range(-10,10), UnityEngine.Random.Range(-10,10)), ForceMode2D.Impulse);
 
-        rb.AddForce(new Vector2(-position.x, -position.y), ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(-position.x, -position.y).normalized*10, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -38,15 +41,30 @@ public class AsteroidScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         //Debug.Log("collided!!!!");
+        Impact();
+    }
+
+    public void Impact()
+
+    {
         life -= 10;
-        
+        ScoreManager.score += 1;
         UpdateHealthBar(true);
         if (life < 0)
         {
+            
+
             Destroy(healthBar);
             Destroy(gameObject);
+
+            if (asteroidType == 2)
+            {
+                Instantiate(resources, transform.position,transform.rotation);
+            }
+
         }
     }
+
 
     void UpdateHealthBar(bool changed=false)
     {
