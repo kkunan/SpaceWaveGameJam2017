@@ -22,11 +22,12 @@ public class MainScript : MonoBehaviour
     private float asteroidSpawnCounter = 0;
     public GameObject wave;
     private SpaceStationScript stationScript;
+    private waveScript waveSc;
 
     // Use this for initialization
     void Start ()
     {
-        // stationScript = station.GetComponent<SpaceStationScript>();
+         stationScript = station.GetComponent<SpaceStationScript>();
 
         asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
     }
@@ -35,6 +36,25 @@ public class MainScript : MonoBehaviour
     void Update ()
     {
         turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
+
+        Boolean click = stationScript.clicking;
+
+        //      Debug.Log("passing click = "+click);
+        if (click)
+        {
+
+            Vector2 stationPos = station.transform.position;
+            Vector2 rotateVector = station.transform.rotation * (Vector2.up);
+
+            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius;
+
+
+     //       Debug.Log(station.transform.rotation + " " + rotateVector + " " + newWavePos);
+            // newWavePos += stationPos*station.GetComponent<CircleCollider2D>().radius;
+            GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
+
+            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y));
+        }
 
         asteroidSpawnCounter -= Time.deltaTime;
         if (asteroidSpawnCounter < 0)
@@ -74,7 +94,7 @@ public class MainScript : MonoBehaviour
             // Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
 
             Instantiate(asteroid, spawnPos, Quaternion.identity);
-            Debug.Log("oh no an asteroid");
+           // Debug.Log("oh no an asteroid");
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
 

@@ -21,7 +21,7 @@ public class SpaceStationHp : MonoBehaviour {
 
 	}
 	void OnCollisionEnter2D(Collision2D other){
-		print ("collided");
+		Debug.Log ("collided");
 		currentlife -= 10;
 		float percent = currentlife / lives;
 		livesValueImage.fillAmount = percent;
