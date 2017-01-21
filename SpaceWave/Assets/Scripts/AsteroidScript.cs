@@ -41,14 +41,30 @@ public class AsteroidScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         //Debug.Log("collided!!!!");
+        if(other.gameObject.tag == "Wave")
+            ImpactFromWave();
+
+        if (other.gameObject.tag == "Station")
+        {
+            Impact();
+        }
+    }
+
+    void ImpactFromWave()
+    {
         Impact();
+        ScoreManager.score += 1;
     }
 
     public void Impact()
 
     {
+        Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
+        rb.AddForce(new Vector2(rb.position.x,rb.position.y).normalized*10);
+
         life -= 10;
-        ScoreManager.score += 1;
+
+        
         UpdateHealthBar(true);
         if (life < 0)
         {

@@ -2,11 +2,12 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Threading;
 
 public class MainScript : MonoBehaviour
 {
 
-    public bool gameOver = false;
+    public static bool gameOver = false;
 
     public GameObject station;
     public Text turnText;
@@ -16,7 +17,7 @@ public class MainScript : MonoBehaviour
 
     public Text timeValueText;
 
-    public Text gameOverText;
+    public Canvas GameOverCanvas;
 
     public Image turnIndicator;
     public RawImage waveTypeIndicator;
@@ -39,6 +40,8 @@ public class MainScript : MonoBehaviour
 
     private Color[] colors;
 
+
+
     // Use this for initialization
     void Start ()
     {
@@ -56,7 +59,7 @@ public class MainScript : MonoBehaviour
         };
         waveTypeIndicator.color = colors[waveType];
 
-        gameOverText.enabled = false;
+        GameOverCanvas.enabled = false;
     }
 
     int waveTypeManager()
@@ -188,16 +191,46 @@ public class MainScript : MonoBehaviour
             gameObjectRenderer.material.color = whateverColor;
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
-            
+            if (UnityEngine.Random.value > 0.5f)
+                if(asteroidSpawnMinTime>1f)
+                asteroidSpawnMinTime -= 0.001f;
+
+            else 
+            {
+                if (asteroidSpawnMinTime > 2f)
+                asteroidSpawnMaxTime -= 0.001f;
+            }
+
+            Debug.Log(asteroidSpawnMinTime+"-"+asteroidSpawnMaxTime+" s");
+
         }
         UpdateResource();
         time += Time.deltaTime;
+
+        
+
         timeValueText.text = Mathf.FloorToInt(time) + "";
+
+        if(GameOverCanvas.enabled)
+        {
+            
+            Color color = GameOverCanvas.GetComponent<Image>().color;
+            GameOverCanvas.GetComponent<Image>().color = new Color(color.r,color.g,color.b,color.a+=0.005f);
+         //   Debug.Log(GameOverCanvas.GetComponent<Image>().color);
+
+         //   color = GameOverCanvas.GetComponent<Image>().color;
+            if (color.a >= 255)
+                gameOver = true;
+        }
+
+       
     }
 
     public void endGame()
     {
-        gameOver = true;
-        gameOverText.enabled = true;
+        
+        GameOverCanvas.enabled = true;
+
+
     }
 }

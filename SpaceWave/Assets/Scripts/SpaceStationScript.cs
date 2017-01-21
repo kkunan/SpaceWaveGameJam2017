@@ -16,6 +16,7 @@ public class SpaceStationScript : MonoBehaviour
     public float currentlife;
     public AudioClip hitAudio;
     public AudioClip deadSound;
+    public AudioClip fireSound;
     public Image livesValueImage;
 
     public MainScript mainController;
@@ -40,6 +41,8 @@ public class SpaceStationScript : MonoBehaviour
             {
                 clicking = true;
                 waveSpawnCounter = 0.1f;
+
+                AudioSource.PlayClipAtPoint(fireSound, transform.position);
             }
 
             else
@@ -140,14 +143,16 @@ public class SpaceStationScript : MonoBehaviour
         if (currentlife <= 0)
         {
             //game over
-            if (!mainController.gameOver)
+            if (!MainScript.gameOver)
             {
                 // TODO: explode space station
                 AudioSource.PlayClipAtPoint(deadSound, transform.position);
+               
                 mainController.endGame();
+
             }
         }
-        Debug.Log(percent +" "+ livesValueImage.color);
+     //   Debug.Log(percent +" "+ livesValueImage.color);
     }
 
 
