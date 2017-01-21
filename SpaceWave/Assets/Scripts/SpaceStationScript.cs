@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class SpaceStationScript : MonoBehaviour
@@ -6,6 +7,10 @@ public class SpaceStationScript : MonoBehaviour
 	public float turningSpeed = 5.0f;
 
 	private float targetAngle = 0.0f;
+
+    private float waveSpawnCounter = 0;
+
+    public Boolean clicking;
 
 	// Use this for initialization
 	void Start ()
@@ -15,9 +20,32 @@ public class SpaceStationScript : MonoBehaviour
 	// Update is called once per frame
 	// Do not adjust rigidbodies or colliders etc. in this method!
 	void Update () {
-		 HandleMouseInput();
-	//	HandleKeyboardInput();
-	}
+		HandleMouseInput();
+
+        if (Input.GetMouseButton(0))
+        {
+            waveSpawnCounter -= Time.deltaTime;
+            if (waveSpawnCounter < 0)
+            {
+                clicking = true;
+                waveSpawnCounter = 5;
+            }
+
+            else
+            {
+                clicking = false;
+            }
+           
+        }
+
+        else
+        {
+            clicking = false;
+            waveSpawnCounter = 0;
+        }
+
+        //	HandleKeyboardInput();
+    }
 
 	void HandleKeyboardInput()
 	{
@@ -30,12 +58,17 @@ public class SpaceStationScript : MonoBehaviour
 		{
 			turn += -1;
 		}
+
+	    
 		float angle = transform.eulerAngles.z * Mathf.Deg2Rad;
 		targetAngle = angle + turningSpeed*Time.deltaTime*turn;
 	}
 
+
+
 	void HandleMouseInput()
 	{
+        
 		// Get the mouse pointer and turn it into a world vector (ie. an ingame vector)
 		Vector3 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 		mousePoint.z = 0;
