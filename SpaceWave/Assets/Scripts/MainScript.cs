@@ -22,14 +22,54 @@ public class MainScript : MonoBehaviour
     private float asteroidSpawnCounter = 0;
     public GameObject wave;
     private SpaceStationScript stationScript;
-    private waveScript waveSc;
+
+    private WaveScript waveSc;
+    private int waveType;
+
+    private Color[] colors;
 
     // Use this for initialization
     void Start ()
     {
-         stationScript = station.GetComponent<SpaceStationScript>();
-
+        stationScript = station.GetComponent<SpaceStationScript>();
+        waveSc = wave.GetComponent<WaveScript>();
         asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
+
+        waveType = 1;
+
+        colors = new Color[]
+        {
+            Color.blue,
+            Color.red, 
+            Color.green 
+        };
+
+    }
+
+    int waveTypeManager()
+    {
+        if (Input.GetKeyDown("1"))
+        {
+            //default, for destroy non-resource asteroids
+            waveType = 1;
+            Debug.Log("press 1" + waveType);
+        }
+
+        else if (Input.GetKeyDown("2"))
+        {
+            // for destroy resource ones
+            waveType = 2;
+            Debug.Log("press 2" + waveType);
+        }
+
+        else if (Input.GetKeyDown("3"))
+        {
+            //for collect the resource (drag inside while the wave hit resources (and asteroids?)
+            waveType = 3;
+            Debug.Log("press 3 "+waveType);
+        }
+
+        return waveType;
     }
     
     // Update is called once per frame
@@ -40,6 +80,8 @@ public class MainScript : MonoBehaviour
         Boolean click = stationScript.clicking;
 
         //      Debug.Log("passing click = "+click);
+        int index = waveTypeManager() - 1;
+
         if (click)
         {
 
@@ -54,6 +96,19 @@ public class MainScript : MonoBehaviour
             GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
 
             newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y));
+
+           
+
+            Color whateverColor = colors[index];
+
+            Debug.Log(whateverColor);
+
+            SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
+
+            gameObjectRenderer.material.color = whateverColor;
+
+       //     Debug.Log(waveSc.waveType+" "+whateverColor);
+
         }
 
         asteroidSpawnCounter -= Time.deltaTime;

@@ -92,7 +92,7 @@ public class SpaceStationScript : MonoBehaviour
         float percent = currentlife / lives;
         livesValueImage.fillAmount = percent;
 
-        Debug.Log(percent+" "+livesValueImage.fillAmount);
+     //   Debug.Log(percent+" "+livesValueImage.fillAmount);
 
         Color currentColor = livesValueImage.color;
 
