@@ -1,13 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Runtime.Remoting.Lifetime;
 
-public class AsteroidScript : MonoBehaviour {
+public class AsteroidScript : MonoBehaviour
+{
+    public float initialLife = 100f;
+    public float healthBarXScaleAtMax = 7.5f;
+    public Vector3 healthBarOffset = new Vector3(0, 4, 0);
 
-	// Use this for initialization
-	void Start () {
-       
-        	Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
-            Vector2 position = gameObject.transform.position;
+    private float life;
+    public GameObject healthBarPrefab;
+    private GameObject healthBar;
+
+    // Use this for initialization
+    void Start()
+    {
+        life = initialLife;
+        healthBar = GameObject.Instantiate(healthBarPrefab);
+
+
+        Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
+        Vector2 position = gameObject.transform.position;
 
 
         //random velocity
@@ -17,9 +30,33 @@ public class AsteroidScript : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
+        UpdateHealthBar();
+    }
 
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        //Debug.Log("collided!!!!");
+        life -= 10;
+        
+        UpdateHealthBar(true);
+        if (life < 0)
+        {
+            Destroy(healthBar);
+            Destroy(gameObject);
+        }
+    }
 
-	
-	}
+    void UpdateHealthBar(bool changed=false)
+    {
+        healthBar.transform.position = transform.position + healthBarOffset;
+        if (changed)
+        {
+            float percent = life / initialLife;
+            healthBar.transform.localScale = new Vector3(healthBarXScaleAtMax * percent, 1, 1);
+            healthBar.GetComponent<SpriteRenderer>().material.color = Utils.GetHealthColor(life, initialLife);
+        }
+        
+    }
 }
