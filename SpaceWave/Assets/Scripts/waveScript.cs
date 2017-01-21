@@ -12,7 +12,7 @@ public class waveScript : MonoBehaviour {
 	void Update ()
 	{
 
-	    this.transform.localScale+=new Vector3(0.001f,0,0);
+        this.transform.localScale+=new Vector3(0.001f,0,0);
 
 	}
 }

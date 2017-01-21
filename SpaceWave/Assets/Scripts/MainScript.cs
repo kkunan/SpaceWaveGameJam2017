@@ -20,7 +20,8 @@ public class MainScript : MonoBehaviour
     public float asteroidSpawnMinTime = 20; // seconds
     public float asteroidSpawnMaxTime = 50;
     private float asteroidSpawnCounter = 0;
-
+    public GameObject wave;
+    private SpaceStationScript stationScript;
 
     // Use this for initialization
     void Start ()
