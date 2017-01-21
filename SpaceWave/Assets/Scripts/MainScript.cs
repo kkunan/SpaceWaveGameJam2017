@@ -164,11 +164,6 @@ public class MainScript : MonoBehaviour
             Vector3 spawnPos = Camera.main.ViewportToWorldPoint (viewport);
 
             //Spawn in the screen but not too close to center
-            // Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
-
-            Instantiate(asteroid, spawnPos, Quaternion.identity);
-           // Debug.Log("oh no an asteroid");
-            asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
             GameObject aste = (GameObject)Instantiate(asteroid, spawnPos, Quaternion.identity);
 

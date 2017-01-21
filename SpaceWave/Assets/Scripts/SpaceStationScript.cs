@@ -13,7 +13,7 @@ public class SpaceStationScript : MonoBehaviour
     public Boolean clicking;
 
     public float lives;
-    float currentlife;
+    public float currentlife;
     public AudioClip hitAudio;
     public AudioClip deadSound;
     public Image livesValueImage;
@@ -91,24 +91,49 @@ public class SpaceStationScript : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         //Debug.Log("collided!!!!");
-        currentlife -= 10;
-        AudioSource.PlayClipAtPoint(hitAudio,transform.position);
+
+        if (other.gameObject.tag == "Asteroid")
+        {
+            currentlife -= 10;
+            AudioSource.PlayClipAtPoint(hitAudio, transform.position);
+
+
+            //  Debug.Log(percent + " " + livesValueImage.fillAmount);
+           
+
+        }
+
+        else if (other.gameObject.tag == "Resource")
+        {
+
+            ScoreManager.Resource++;
+            currentlife += 15;
+
+            currentlife = Math.Min(lives, currentlife);
+            Destroy(other.gameObject);
+
+           
+        }
+
+        liveBarColorManager();
+
+    }
+
+    void liveBarColorManager()
+    {
         float percent = currentlife / lives;
         livesValueImage.fillAmount = percent;
-
-        Debug.Log(percent + " " + livesValueImage.fillAmount);
-
         Color currentColor = livesValueImage.color;
 
         if (percent > 0.65f)
         {
-            livesValueImage.color = new Color(currentColor.r + 0.1f / 0.35f, currentColor.g, 0, 1);
+            livesValueImage.color = new Color(1-percent, 1, 0, 1);
         }
         else if (percent <= 0.65f && percent > 0.30f)
         {
-            livesValueImage.color = new Color(1, currentColor.g - 0.1f / 0.35f, 0, 1);
+            livesValueImage.color = new Color(1, percent+0.2f, 0, 1);
         }
-        else if (percent < -0.3f)
+        else if (percent < 0.3f)
         {
             livesValueImage.color = new Color(1, 0, 0, 1);
         }
@@ -118,13 +143,11 @@ public class SpaceStationScript : MonoBehaviour
             if (!mainController.gameOver)
             {
                 // TODO: explode space station
-				AudioSource.PlayClipAtPoint(deadSound,transform.position);
-                mainController.endGame();                
+                AudioSource.PlayClipAtPoint(deadSound, transform.position);
+                mainController.endGame();
             }
         }
-        //print (currentColor);
-
-
+        Debug.Log(percent +" "+ livesValueImage.color);
     }
 
 

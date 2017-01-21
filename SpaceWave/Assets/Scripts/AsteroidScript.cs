@@ -5,8 +5,8 @@ using System.Runtime.Remoting.Lifetime;
 public class AsteroidScript : MonoBehaviour
 {
     public float initialLife = 100f;
-    public float healthBarXScaleAtMax = 7.5f;
-    public Vector3 healthBarOffset = new Vector3(0, 4, 0);
+    public float healthBarXScaleAtMax = 1f;
+    public Vector3 healthBarOffset = new Vector3(0, -20f, 0);
     public AudioClip explosion;
     public GameObject resources;
 
@@ -72,11 +72,11 @@ public class AsteroidScript : MonoBehaviour
         {
             healthBar.SetActive(true);
         }
-        healthBar.transform.position = transform.position + healthBarOffset;
+        healthBar.transform.position = gameObject.transform.position + healthBarOffset;
         if (changed)
         {
             float percent = life / initialLife;
-            healthBar.transform.localScale = new Vector3(healthBarXScaleAtMax * percent, 1, 1);
+            healthBar.transform.localScale = new Vector3(healthBarXScaleAtMax * percent, 15, 1);
             healthBar.GetComponent<SpriteRenderer>().material.color = Utils.GetHealthColor(life, initialLife);
         }
         
