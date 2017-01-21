@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class MainScript : MonoBehaviour
 {
+
+    public bool gameOver = false;
+
     public GameObject station;
     public Text turnText;
     public Text scoreValueText;
@@ -12,6 +15,8 @@ public class MainScript : MonoBehaviour
     public Text resourcesValueText;
 
     public Text timeValueText;
+
+    public Text gameOverText;
 
     public Image turnIndicator;
     public RawImage waveTypeIndicator;
@@ -50,6 +55,8 @@ public class MainScript : MonoBehaviour
             Color.green 
         };
         waveTypeIndicator.color = colors[waveType];
+
+        gameOverText.enabled = false;
     }
 
     int waveTypeManager()
@@ -90,6 +97,12 @@ public class MainScript : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
+        if (gameOver)
+        {
+            return;
+        }
+        
+        
         //turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
         turnIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, station.transform.rotation.eulerAngles.z);
 
@@ -184,6 +197,12 @@ public class MainScript : MonoBehaviour
         }
         UpdateResource();
         time += Time.deltaTime;
-        timeText.text = Mathf.FloorToInt(time) + "";
+        timeValueText.text = Mathf.FloorToInt(time) + "";
+    }
+
+    public void endGame()
+    {
+        gameOver = true;
+        gameOverText.enabled = true;
     }
 }
