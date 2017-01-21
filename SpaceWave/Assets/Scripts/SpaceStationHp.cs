@@ -25,17 +25,6 @@ public class SpaceStationHp : MonoBehaviour {
 		currentlife -= 10;
 		float percent = currentlife / lives;
 		livesValueImage.fillAmount = percent;
-		Color currentColor = livesValueImage.color;
-		if (percent > 0.65f) {
-			livesValueImage.color = new Color (currentColor.r + 0.1f/0.35f, currentColor.g, 0,1);
-		} else if (percent <= 0.65f && percent > 0.30f) {
-			livesValueImage.color = new Color (1 , currentColor.g-0.1f/0.35f, 0,1);
-		} else if(percent<-0.3f){
-			livesValueImage.color = new Color (1, 0, 0,1);
-		}
-
-		//print (currentColor);
-
-
+	    livesValueImage.color = Utils.GetHealthColor(currentlife, lives);
 	}
 }
