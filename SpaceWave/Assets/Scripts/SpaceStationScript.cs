@@ -18,10 +18,13 @@ public class SpaceStationScript : MonoBehaviour
     public AudioClip deadSound;
     public Image livesValueImage;
 
+    public MainScript mainController;
+
     // Use this for initialization
     void Start()
     {
         currentlife = lives;
+        mainController = GameObject.Find("GameManager").GetComponent<MainScript>();
     }
 
     // Update is called once per frame
@@ -112,8 +115,12 @@ public class SpaceStationScript : MonoBehaviour
         if (currentlife <= 0)
         {
             //game over
-            AudioSource.PlayClipAtPoint(deadSound,transform.position);
-          
+            if (!mainController.gameOver)
+            {
+                // TODO: explode space station
+				AudioSource.PlayClipAtPoint(deadSound,transform.position);
+                mainController.endGame();                
+            }
         }
         //print (currentColor);
 
