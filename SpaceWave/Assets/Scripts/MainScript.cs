@@ -90,15 +90,11 @@ public class MainScript : MonoBehaviour
 
             Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius;
 
-
-     //       Debug.Log(station.transform.rotation + " " + rotateVector + " " + newWavePos);
-            // newWavePos += stationPos*station.GetComponent<CircleCollider2D>().radius;
+           
             GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
 
-            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y));
-
-           
-
+            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
+            
             Color whateverColor = colors[index];
 
             Debug.Log(whateverColor);
@@ -106,8 +102,7 @@ public class MainScript : MonoBehaviour
             SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
 
             gameObjectRenderer.material.color = whateverColor;
-
-       //     Debug.Log(waveSc.waveType+" "+whateverColor);
+            
 
         }
 

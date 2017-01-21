@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 public class SpaceStationScript : MonoBehaviour
 {
@@ -11,17 +10,11 @@ public class SpaceStationScript : MonoBehaviour
 
     private float waveSpawnCounter = 0;
 
-    public Boolean clicking  = false;
-
-    public float lives;
-    float currentlife;
-    public Image livesValueImage;
+    public Boolean clicking;
 
     // Use this for initialization
     void Start()
     {
-        currentlife = lives;
-        Color currentColor = livesValueImage.color;
     }
 
     // Update is called once per frame
@@ -36,7 +29,7 @@ public class SpaceStationScript : MonoBehaviour
             if (waveSpawnCounter < 0)
             {
                 clicking = true;
-                waveSpawnCounter = 5;
+                waveSpawnCounter = 0.1f;
             }
 
             else
@@ -82,36 +75,6 @@ public class SpaceStationScript : MonoBehaviour
         mousePoint.z = 0;
         // Get target angle to mouse pointer
         targetAngle = Mathf.Atan2(transform.position.y - mousePoint.y, transform.position.x - mousePoint.x) + Mathf.PI / 2f;
-    }
-
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        //Debug.Log("collided!!!!");
-        currentlife -= 10;
-        
-        float percent = currentlife / lives;
-        livesValueImage.fillAmount = percent;
-
-     //   Debug.Log(percent+" "+livesValueImage.fillAmount);
-
-        Color currentColor = livesValueImage.color;
-
-        if (percent > 0.65f)
-        {
-            livesValueImage.color = new Color(currentColor.r + 0.1f / 0.35f, currentColor.g, 0, 1);
-        }
-        else if (percent <= 0.65f && percent > 0.30f)
-        {
-            livesValueImage.color = new Color(1, currentColor.g - 0.1f / 0.35f, 0, 1);
-        }
-        else if (percent < -0.3f)
-        {
-            livesValueImage.color = new Color(1, 0, 0, 1);
-        }
-
-        //print (currentColor);
-
-
     }
 
     // FixedUpdate is called once per physics tick
