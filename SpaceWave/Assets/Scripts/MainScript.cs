@@ -5,16 +5,22 @@ using UnityEngine.UI;
 
 public class MainScript : MonoBehaviour
 {
-
     public GameObject station;
     public Text turnText;
     public Text scoreValueText;
 
     public Text resourcesValueText;
 
+    public Text timeValueText;
+
+    public Image turnIndicator;
+    public RawImage waveTypeIndicator;
+
     public float score;
     
     public float resources;
+
+    public float time;
 
     public GameObject asteroid;
     public float asteroidSpawnMinTime = 20; // seconds
@@ -43,7 +49,7 @@ public class MainScript : MonoBehaviour
             Color.red, 
             Color.green 
         };
-
+        waveTypeIndicator.color = colors[waveType];
     }
 
     int waveTypeManager()
@@ -68,8 +74,8 @@ public class MainScript : MonoBehaviour
             waveType = 3;
       //      Debug.Log("press 3 "+waveType);
         }
-        
 
+        waveTypeIndicator.color = colors[waveType - 1];
         return waveType;
     }
 
@@ -80,10 +86,13 @@ public class MainScript : MonoBehaviour
         
     }
 
+    
     // Update is called once per frame
     void Update ()
     {
-        turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
+        //turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
+        turnIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, station.transform.rotation.eulerAngles.z);
+
 
         Boolean click = stationScript.clicking;
 
@@ -91,27 +100,17 @@ public class MainScript : MonoBehaviour
         int index = waveTypeManager() - 1;
 
         if (click)
-        {
-
+        {            
             Vector2 stationPos = station.transform.position;
             Vector2 rotateVector = station.transform.rotation * (Vector2.up);
+            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius * station.transform.localScale.x;
 
-            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius*station.transform.localScale.x;
-
-           
             GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
-
-            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
-
             newWave.GetComponent<WaveScript>().waveType = index + 1;
-       //     Debug.Log("wave type "+newWave.GetComponent<WaveScript>().waveType);
-
+            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
+            
             Color whateverColor = colors[index];
-
-         //   Debug.Log(whateverColor);
-
             SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
-
             gameObjectRenderer.material.color = whateverColor;
             
 
@@ -132,27 +131,31 @@ public class MainScript : MonoBehaviour
             float directionY = randomY / Mathf.Abs(randomX);
             float yPos = directionY * height / 2 + randomX * (randomX / Mathf.Abs(randomX));
 
-			//spawn asteroids from 4 edges of screen
-			Vector3 viewport=new Vector3();
-			int direction = UnityEngine.Random.Range (0,4);
-			if (direction == 0) {
-				viewport = new Vector3 (0, UnityEngine.Random.Range (0f, 1f), 2);
-				//print ("viewport 0: "+viewport.ToString());
-			} else if (direction == 1) {
-				viewport = new Vector3 (UnityEngine.Random.Range (0f, 1f),0, 2);
-				//print ("viewport 1: "+viewport.ToString());
-			} else if (direction == 2) {
-				viewport = new Vector3 (1,UnityEngine.Random.Range (0f, 1f),2);
-				//print ("viewport 2: "+viewport.ToString());
-			} else if (direction == 3) {
-				viewport = new Vector3 (UnityEngine.Random.Range (0f, 1f),1,2);
-				//print ("viewport 3: "+viewport.ToString());
-			}
+            //spawn asteroids from 4 edges of screen
+            Vector3 viewport=new Vector3();
+            int direction = UnityEngine.Random.Range (0,4);
+            if (direction == 0) {
+                viewport = new Vector3 (0, UnityEngine.Random.Range (0f, 1f), 2);
+                //print ("viewport 0: "+viewport.ToString());
+            } else if (direction == 1) {
+                viewport = new Vector3 (UnityEngine.Random.Range (0f, 1f),0, 2);
+                //print ("viewport 1: "+viewport.ToString());
+            } else if (direction == 2) {
+                viewport = new Vector3 (1,UnityEngine.Random.Range (0f, 1f),2);
+                //print ("viewport 2: "+viewport.ToString());
+            } else if (direction == 3) {
+                viewport = new Vector3 (UnityEngine.Random.Range (0f, 1f),1,2);
+                //print ("viewport 3: "+viewport.ToString());
+            }
 
-			Vector3 spawnPos = Camera.main.ViewportToWorldPoint (viewport);
+            Vector3 spawnPos = Camera.main.ViewportToWorldPoint (viewport);
 
             //Spawn in the screen but not too close to center
             // Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
+
+            Instantiate(asteroid, spawnPos, Quaternion.identity);
+           // Debug.Log("oh no an asteroid");
+            asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
             GameObject aste = (GameObject)Instantiate(asteroid, spawnPos, Quaternion.identity);
 
@@ -180,6 +183,7 @@ public class MainScript : MonoBehaviour
             
         }
         UpdateResource();
+        time += Time.deltaTime;
+        timeText.text = Mathf.FloorToInt(time) + "";
     }
-
 }

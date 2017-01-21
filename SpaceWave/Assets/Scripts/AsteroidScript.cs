@@ -21,7 +21,7 @@ public class AsteroidScript : MonoBehaviour
     {
         life = initialLife;
         healthBar = GameObject.Instantiate(healthBarPrefab);
-        
+        healthBar.SetActive(false);
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         Vector2 position = gameObject.transform.position;
 
@@ -68,6 +68,10 @@ public class AsteroidScript : MonoBehaviour
 
     void UpdateHealthBar(bool changed=false)
     {
+        if (!healthBar.activeInHierarchy)
+        {
+            healthBar.SetActive(true);
+        }
         healthBar.transform.position = transform.position + healthBarOffset;
         if (changed)
         {
