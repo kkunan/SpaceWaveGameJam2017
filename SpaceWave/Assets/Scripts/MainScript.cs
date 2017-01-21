@@ -6,120 +6,128 @@ using UnityEngine.UI;
 public class MainScript : MonoBehaviour
 {
 
-    public GameObject station;
-    public Text turnText;
-    public Text scoreValueText;
+	public GameObject station;
+	public Text scoreValueText;
+	public Text resourcesValueText;
+	public Text timeText;
+	public Image turnIndicator;
+    public RawImage waveTypeIndicator;
 
-    public Text resourcesValueText;
+	public float score;
+	
+	public float resources;
 
-    public float score;
-    
-    public float resources;
+	public float time;
 
-    public GameObject asteroid;
-    public float asteroidSpawnMinTime = 20; // seconds
-    public float asteroidSpawnMaxTime = 50;
-    private float asteroidSpawnCounter = 0;
-    public GameObject wave;
-    private SpaceStationScript stationScript;
+	public GameObject asteroid;
+	public float asteroidSpawnMinTime = 20; // seconds
+	public float asteroidSpawnMaxTime = 50;
+	private float asteroidSpawnCounter = 0;
+	public GameObject wave;
+	private SpaceStationScript stationScript;
 
-    private WaveScript waveSc;
-    private int waveType;
+	private WaveScript waveSc;
+	private int waveType;
 
-    private Color[] colors;
+	private Color[] colors;
 
-    // Use this for initialization
-    void Start ()
-    {
-        stationScript = station.GetComponent<SpaceStationScript>();
-        waveSc = wave.GetComponent<WaveScript>();
-        asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
+	// Use this for initialization
+	void Start ()
+	{
+		stationScript = station.GetComponent<SpaceStationScript>();
+		waveSc = wave.GetComponent<WaveScript>();
+		asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
-        waveType = 1;
+		waveType = 1;
 
-        colors = new Color[]
-        {
-            Color.blue,
-            Color.red, 
-            Color.green 
-        };
+		colors = new Color[]
+		{
+			Color.blue,
+			Color.red, 
+			Color.green 
+		};
 
-    }
+	    waveTypeIndicator.color = colors[waveType];
+	}
 
-    int waveTypeManager()
-    {
-        if (Input.GetKeyDown("1"))
-        {
-            //default, for destroy non-resource asteroids
-            waveType = 1;
-            Debug.Log("press 1" + waveType);
-        }
+	int waveTypeManager()
+	{
+		if (Input.GetKeyDown("1"))
+		{
+			//default, for destroy non-resource asteroids
+			waveType = 1;
+			Debug.Log("press 1" + waveType);
+		}
 
-        else if (Input.GetKeyDown("2"))
-        {
-            // for destroy resource ones
-            waveType = 2;
-            Debug.Log("press 2" + waveType);
-        }
+		else if (Input.GetKeyDown("2"))
+		{
+			// for destroy resource ones
+			waveType = 2;
+			Debug.Log("press 2" + waveType);
+		}
 
-        else if (Input.GetKeyDown("3"))
-        {
-            //for collect the resource (drag inside while the wave hit resources (and asteroids?)
-            waveType = 3;
-            Debug.Log("press 3 "+waveType);
-        }
+		else if (Input.GetKeyDown("3"))
+		{
+			//for collect the resource (drag inside while the wave hit resources (and asteroids?)
+			waveType = 3;
+			Debug.Log("press 3 "+waveType);
+		}
 
+        waveTypeIndicator.color = colors[waveType - 1];
         return waveType;
-    }
-    
-    // Update is called once per frame
-    void Update ()
-    {
-        turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
+	}
+	
+	// Update is called once per frame
+	void Update ()
+	{
+		//turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
+		turnIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, station.transform.rotation.eulerAngles.z);
 
-        Boolean click = stationScript.clicking;
 
-        //      Debug.Log("passing click = "+click);
-        int index = waveTypeManager() - 1;
 
-        if (click)
-        {
+		Boolean click = stationScript.clicking;
 
-            Vector2 stationPos = station.transform.position;
-            Vector2 rotateVector = station.transform.rotation * (Vector2.up);
+		//      Debug.Log("passing click = "+click);
+		int index = waveTypeManager() - 1;
 
-            Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius;
+		if (click)
+		{
 
-           
-            GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
+			Vector2 stationPos = station.transform.position;
+			Vector2 rotateVector = station.transform.rotation * (Vector2.up);
 
-            newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
-            
-            Color whateverColor = colors[index];
+			Vector2 newWavePos = stationPos + rotateVector * station.GetComponent<CircleCollider2D>().radius;
 
-            Debug.Log(whateverColor);
+		   
+			GameObject newWave = (GameObject)Instantiate(wave, newWavePos, station.transform.rotation);
 
-            SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
+			newWave.GetComponent<Rigidbody2D>().AddForce(new Vector2(newWavePos.x, newWavePos.y)*100);
+			
+			Color whateverColor = colors[index];
 
-            gameObjectRenderer.material.color = whateverColor;
-            
+			Debug.Log(whateverColor);
 
-        }
+			SpriteRenderer gameObjectRenderer = newWave.GetComponent<SpriteRenderer>();
 
-        asteroidSpawnCounter -= Time.deltaTime;
-        if (asteroidSpawnCounter < 0)
-        {
-            Camera cam = Camera.main;
-            float height = 2f * cam.orthographicSize;
-            float width = height * cam.aspect;
+			gameObjectRenderer.material.color = whateverColor;
+			
 
-            float randomX = UnityEngine.Random.Range(-20f, 20f);
-            float directionX = randomX/Mathf.Abs(randomX);
-            float xPos = directionX*width/2 + randomX*(randomX/Mathf.Abs(randomX));
+		}
 
-            float randomY = UnityEngine.Random.Range(-20f, 20f);
-            float directionY = randomY / Mathf.Abs(randomX);
-            float yPos = directionY * height / 2 + randomX * (randomX / Mathf.Abs(randomX));
+		asteroidSpawnCounter -= Time.deltaTime;
+		if (asteroidSpawnCounter < 0)
+		{
+			Camera cam = Camera.main;
+			float height = 2f * cam.orthographicSize;
+			float width = height * cam.aspect;
+
+			float randomX = UnityEngine.Random.Range(-20f, 20f);
+			float directionX = randomX/Mathf.Abs(randomX);
+			float xPos = directionX*width/2 + randomX*(randomX/Mathf.Abs(randomX));
+
+			float randomY = UnityEngine.Random.Range(-20f, 20f);
+			float directionY = randomY / Mathf.Abs(randomX);
+			float yPos = directionY * height / 2 + randomX * (randomX / Mathf.Abs(randomX));
 
 			//spawn asteroids from 4 edges of screen
 			Vector3 viewport=new Vector3();
@@ -140,15 +148,18 @@ public class MainScript : MonoBehaviour
 
 			Vector3 spawnPos = Camera.main.ViewportToWorldPoint (viewport);
 
-            //Spawn in the screen but not too close to center
-            // Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
+			//Spawn in the screen but not too close to center
+			// Vector3 spawnPos = new Vector3(UnityEngine.Random.value*width, UnityEngine.Random.value*height - height/2, 0);
 
-            Instantiate(asteroid, spawnPos, Quaternion.identity);
-           // Debug.Log("oh no an asteroid");
-            asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
+			Instantiate(asteroid, spawnPos, Quaternion.identity);
+		   // Debug.Log("oh no an asteroid");
+			asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
 
-        }
-    }
+		}
+
+		time += Time.deltaTime;
+		timeText.text = Mathf.FloorToInt(time) + "";
+	}
 
 }
