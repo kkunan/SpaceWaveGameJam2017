@@ -22,7 +22,6 @@ public class MainScript : MonoBehaviour
     private float asteroidSpawnCounter = 0;
 
     public GameObject wave;
-    public GameObject spaceStation;
     private SpaceStationScript stationScript;
 
 

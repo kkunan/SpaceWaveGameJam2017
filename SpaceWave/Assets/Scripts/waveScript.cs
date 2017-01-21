@@ -11,5 +11,7 @@ public class waveScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+        this.transform.localScale+=new Vector3(0.001f,0,0);
+
 	}
 }
