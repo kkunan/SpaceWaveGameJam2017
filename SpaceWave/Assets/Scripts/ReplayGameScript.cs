@@ -29,4 +29,9 @@ public class ReplayGameScript : MonoBehaviour
         // Debug.Log(GameOverCanvas.GetComponent<Image>().color);
 
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }

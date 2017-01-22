@@ -19,7 +19,7 @@ public class ResourceScript : MonoBehaviour
 	    if (ttl < 0)
 	    {
 	        ScoreManager.Resource += 1;
-            Debug.Log("resources "+ScoreManager.Resource);
+       //     Debug.Log("resources "+ScoreManager.Resource);
 	        Destroy(gameObject);
 	    }
 

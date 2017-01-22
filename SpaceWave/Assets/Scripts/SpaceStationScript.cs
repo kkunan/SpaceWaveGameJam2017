@@ -58,6 +58,8 @@ public class SpaceStationScript : MonoBehaviour
             waveSpawnCounter = 0;
         }
 
+  //      Debug.Log(ScoreManager.score);
+
         //	HandleKeyboardInput();
     }
 

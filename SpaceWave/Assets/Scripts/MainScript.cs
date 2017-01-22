@@ -40,7 +40,8 @@ public class MainScript : MonoBehaviour
 
     private Color[] colors;
 
-
+    public Sprite asteroid1;
+    public Sprite asteroid2;
 
     // Use this for initialization
     void Start ()
@@ -169,25 +170,25 @@ public class MainScript : MonoBehaviour
             //Spawn in the screen but not too close to center
 
             GameObject aste = (GameObject)Instantiate(asteroid, spawnPos, Quaternion.identity);
-
+            SpriteRenderer gameObjectRenderer = aste.GetComponent<SpriteRenderer>();
             float type = UnityEngine.Random.value;
             int index2;
             if (type > 0.5)
             {
                 index2 = 0;
                 aste.GetComponent<AsteroidScript>().asteroidType = 1;
+                gameObjectRenderer.sprite = asteroid1;
             }
 
             else
             {
                 index2 = 1;
                 aste.GetComponent<AsteroidScript>().asteroidType = 2;
+                gameObjectRenderer.sprite = asteroid2;
             }
 
             Color whateverColor = colors[index2];
-
-            SpriteRenderer gameObjectRenderer = aste.GetComponent<SpriteRenderer>();
-
+            
             gameObjectRenderer.material.color = whateverColor;
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
@@ -201,7 +202,7 @@ public class MainScript : MonoBehaviour
                 asteroidSpawnMaxTime -= 0.001f;
             }
 
-            Debug.Log(asteroidSpawnMinTime+"-"+asteroidSpawnMaxTime+" s");
+      //      Debug.Log(asteroidSpawnMinTime+"-"+asteroidSpawnMaxTime+" s");
 
         }
         UpdateResource();
@@ -209,7 +210,7 @@ public class MainScript : MonoBehaviour
 
         
 
-        timeValueText.text = Mathf.FloorToInt(time) + "";
+        timeValueText.text = "Survive "+Mathf.FloorToInt(time) + " s";
 
         if(GameOverCanvas.enabled)
         {
@@ -230,6 +231,8 @@ public class MainScript : MonoBehaviour
     {
         
         GameOverCanvas.enabled = true;
+
+        ScoreManager.reset();
 
 
     }

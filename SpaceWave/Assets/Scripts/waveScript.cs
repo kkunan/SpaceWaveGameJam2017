@@ -35,7 +35,9 @@ public class WaveScript : MonoBehaviour {
             if (asteroid.asteroidType == waveType)
             {
        //         Debug.Log("equal "+asteroid.asteroidType+" "+waveType);
-                asteroid.Impact();
+                asteroid.ImpactFromWave();
+;
+
             }
             else
        //     Debug.Log("not equal " + asteroid.asteroidType + " " + waveType);
