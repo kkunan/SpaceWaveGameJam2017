@@ -5,7 +5,7 @@ public class BlastScript : MonoBehaviour {
 
 	// Use this for initialization
     private float ttl;
-    private float scaleSpeed = 5;
+    private float scaleSpeed = 1;
 	void Start ()
 	{
 

@@ -228,12 +228,12 @@ public class MainScript : MonoBehaviour
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
             if (UnityEngine.Random.value > 0.5f)
-         //       if(asteroidSpawnMinTime>0.5f)
+                if(asteroidSpawnMinTime>0.5f)
                 asteroidSpawnMinTime -= 0.3f;
 
             else 
             {
-         //       if (asteroidSpawnMinTime > 1f)
+                if (asteroidSpawnMaxTime > 1f)
                 asteroidSpawnMaxTime -= 0.3f;
             }
 
