@@ -35,6 +35,7 @@ public class ReplayGameScript : MonoBehaviour
     public void ReStart()
     {
         Debug.Log("Restart");
+        ScoreManager.reset();
         SceneManager.LoadScene("test");
         Time.timeScale = 1;
     }
