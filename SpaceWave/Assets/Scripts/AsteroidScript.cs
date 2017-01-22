@@ -4,7 +4,8 @@ using System.Runtime.Remoting.Lifetime;
 
 public class AsteroidScript : MonoBehaviour
 {
-    public float initialLife = 100f;
+    public float initialSpinRange = 2f;
+    public float initialLife = 80f;
     public float healthBarXScaleAtMax = 80f;
     public Vector3 healthBarOffset = new Vector3(0, -20f, 0);
 
@@ -52,6 +53,7 @@ public class AsteroidScript : MonoBehaviour
         // rb.AddForce(new Vector2(UnityEngine.Random.Range(-10,10), UnityEngine.Random.Range(-10,10)), ForceMode2D.Impulse);
 
         rb.AddForce(new Vector2(-position.x, -position.y).normalized*10, ForceMode2D.Impulse);
+        rb.AddTorque(Random.Range(-initialSpinRange, initialSpinRange), ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
