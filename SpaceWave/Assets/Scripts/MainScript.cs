@@ -43,9 +43,14 @@ public class MainScript : MonoBehaviour
     public Sprite asteroid1;
     public Sprite asteroid2;
 
+    private float redProb;
+
     // Use this for initialization
     void Start ()
     {
+
+        redProb = 0.5f;
+
         stationScript = station.GetComponent<SpaceStationScript>();
         waveSc = wave.GetComponent<WaveScript>();
         asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
@@ -173,7 +178,9 @@ public class MainScript : MonoBehaviour
             SpriteRenderer gameObjectRenderer = aste.GetComponent<SpriteRenderer>();
             float type = UnityEngine.Random.value;
             int index2;
-            if (type > 0.5)
+
+            Debug.Log(type+" "+redProb);
+            if (type > redProb)
             {
                 index2 = 0;
                 aste.GetComponent<AsteroidScript>().asteroidType = 1;
@@ -193,13 +200,13 @@ public class MainScript : MonoBehaviour
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
             if (UnityEngine.Random.value > 0.5f)
-                if(asteroidSpawnMinTime>1f)
-                asteroidSpawnMinTime -= 0.001f;
+         //       if(asteroidSpawnMinTime>0.5f)
+                asteroidSpawnMinTime -= 0.3f;
 
             else 
             {
-                if (asteroidSpawnMinTime > 2f)
-                asteroidSpawnMaxTime -= 0.001f;
+         //       if (asteroidSpawnMinTime > 1f)
+                asteroidSpawnMaxTime -= 0.3f;
             }
 
       //      Debug.Log(asteroidSpawnMinTime+"-"+asteroidSpawnMaxTime+" s");
@@ -224,7 +231,9 @@ public class MainScript : MonoBehaviour
                 gameOver = true;
         }
 
-       
+        if(redProb>0.1f)
+            redProb -= 0.00005f;
+
     }
 
     public void endGame()
