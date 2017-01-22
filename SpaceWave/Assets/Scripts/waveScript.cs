@@ -39,9 +39,9 @@ public class WaveScript : MonoBehaviour {
 ;
 
             }
-            else
+          //  else
        //     Debug.Log("not equal " + asteroid.asteroidType + " " + waveType);
-            Destroy(gameObject);
+          //  Destroy(gameObject);
         }
     }
 }

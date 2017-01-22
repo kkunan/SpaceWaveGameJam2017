@@ -10,6 +10,8 @@ public class SpaceStationScript : MonoBehaviour
 
     private float waveSpawnCounter = 0;
 
+    public Sprite crack1, crack2, crack3, broken;
+
     public Boolean clicking;
 
     public float lives;
@@ -126,20 +128,25 @@ public class SpaceStationScript : MonoBehaviour
 
     void liveBarColorManager()
     {
+        SpriteRenderer gameObjectRenderer = gameObject.GetComponent<SpriteRenderer>();
+
         float percent = currentlife / lives;
         livesValueImage.fillAmount = percent;
         Color currentColor = livesValueImage.color;
 
         if (percent > 0.65f)
         {
+            gameObjectRenderer.sprite = crack1;
             livesValueImage.color = new Color(1-percent, 1, 0, 1);
         }
         else if (percent <= 0.65f && percent > 0.30f)
         {
+            gameObjectRenderer.sprite = crack2;
             livesValueImage.color = new Color(1, percent+0.2f, 0, 1);
         }
         else if (percent < 0.3f)
         {
+            gameObjectRenderer.sprite = crack3;
             livesValueImage.color = new Color(1, 0, 0, 1);
         }
         if (currentlife <= 0)
@@ -149,7 +156,7 @@ public class SpaceStationScript : MonoBehaviour
             {
                 // TODO: explode space station
                 AudioSource.PlayClipAtPoint(deadSound, transform.position);
-               
+                gameObjectRenderer.sprite = broken;
                 mainController.endGame();
 
             }
