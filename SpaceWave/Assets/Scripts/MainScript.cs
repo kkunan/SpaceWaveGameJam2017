@@ -52,7 +52,7 @@ public class MainScript : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-
+        
         redProb = 0.5f;
 
         stationScript = station.GetComponent<SpaceStationScript>();
@@ -72,6 +72,8 @@ public class MainScript : MonoBehaviour
         GameOverCanvas.enabled = false;
         MenuCanvas.SetActive(false);
     }
+
+
 
     int waveTypeManager()
     {

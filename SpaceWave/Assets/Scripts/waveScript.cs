@@ -6,12 +6,13 @@ using System.Collections;
 public class WaveScript : MonoBehaviour {
 
     public int waveType; //default
-    private float ttl = 2f;
+    private float initialTtl = 2f;
+    private float ttl;
 
     // Use this for initialization
     void Start ()
     {
-        ttl = 2f;
+        ttl = initialTtl;
     }
 	
 	// Update is called once per frame
@@ -20,11 +21,15 @@ public class WaveScript : MonoBehaviour {
         ttl -= Time.deltaTime;
 	    if(ttl<0)
             Destroy(gameObject);
-        this.transform.localScale+=new Vector3(0.05f,0.02f,0.02f);
+        this.transform.localScale+=new Vector3(0.05f,0.05f,0.02f);
+	    SpriteRenderer rend = this.GetComponent<SpriteRenderer>();
+	    Color waveColor = rend.color;
+	    waveColor.a = ttl/initialTtl;
+	    rend.color = waveColor;
 
-     //   Debug.Log("wave type inside wave" + waveType);
+	    //   Debug.Log("wave type inside wave" + waveType);
 
-    }
+	}
 
     void OnTriggerEnter2D(Collider2D other)
     {

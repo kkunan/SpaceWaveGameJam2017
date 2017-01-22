@@ -23,7 +23,7 @@ public class LoadSplashScreen : MonoBehaviour
         if (image.color.a >= 255)
 	    {
             Debug.Log("load scene");
-	        SceneManager.LoadScene("test");
+	        SceneManager.LoadScene("Start");
 
 	    }
 	}

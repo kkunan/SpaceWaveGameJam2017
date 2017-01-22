@@ -5,11 +5,12 @@ public class BlastScript : MonoBehaviour {
 
 	// Use this for initialization
     private float ttl;
+    private float initialTtl = 2;
     private float scaleSpeed = 0.1f;
 	void Start ()
 	{
 
-	    ttl = 2;
+	    ttl = initialTtl;
 	}
 	
 	// Update is called once per frame
@@ -17,9 +18,14 @@ public class BlastScript : MonoBehaviour {
 	{
 
 	    ttl -= Time.deltaTime;
-        gameObject.transform.localScale += Vector3.one*scaleSpeed*Time.deltaTime; 
+        gameObject.transform.localScale += Vector3.one*scaleSpeed*Time.deltaTime;
 
-        if(ttl<0)
+        SpriteRenderer rend = this.GetComponent<SpriteRenderer>();
+        Color myColor = rend.color;
+        myColor.a = ttl / initialTtl;
+        rend.color = myColor;
+
+        if (ttl<0)
             Destroy(gameObject);
 
 	}
