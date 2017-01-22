@@ -17,7 +17,9 @@ public class MainScript : MonoBehaviour
 
     public Text timeValueText;
 
+    public GameObject MenuCanvas;
     public Canvas GameOverCanvas;
+    public GameObject endScoreText;
 
     public Image turnIndicator;
     public RawImage waveTypeIndicator;
@@ -45,6 +47,8 @@ public class MainScript : MonoBehaviour
 
     private float redProb;
 
+
+
     // Use this for initialization
     void Start ()
     {
@@ -66,6 +70,7 @@ public class MainScript : MonoBehaviour
         waveTypeIndicator.color = colors[waveType];
 
         GameOverCanvas.enabled = false;
+        MenuCanvas.SetActive(false);
     }
 
     int waveTypeManager()
@@ -102,7 +107,12 @@ public class MainScript : MonoBehaviour
         
     }
 
-    
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        MenuCanvas.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update ()
     {
@@ -110,7 +120,28 @@ public class MainScript : MonoBehaviour
         {
             return;
         }
-        
+
+        // pops up Menu Screen, hopefully
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (MenuCanvas.activeSelf)
+            {
+                Time.timeScale = 1;
+                MenuCanvas.SetActive(false);
+            }
+            else
+            {
+                Time.timeScale = 0;
+                MenuCanvas.SetActive(true);
+            }
+            
+            
+            Debug.Log("Escape!!!");
+        }
+
+        //if (MenuCanvas.activeSelf)
+        //    Time.timeScale = 0;
+        //else
         
         //turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
         turnIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, station.transform.rotation.eulerAngles.z);
@@ -200,12 +231,12 @@ public class MainScript : MonoBehaviour
             asteroidSpawnCounter = UnityEngine.Random.Range(asteroidSpawnMinTime, asteroidSpawnMaxTime);
 
             if (UnityEngine.Random.value > 0.5f)
-         //       if(asteroidSpawnMinTime>0.5f)
+                if(asteroidSpawnMinTime>0.5f)
                 asteroidSpawnMinTime -= 0.3f;
 
             else 
             {
-         //       if (asteroidSpawnMinTime > 1f)
+                if (asteroidSpawnMaxTime > 1f)
                 asteroidSpawnMaxTime -= 0.3f;
             }
 
@@ -241,6 +272,12 @@ public class MainScript : MonoBehaviour
         
         GameOverCanvas.enabled = true;
 
+        int endScore = ScoreManager.score;
+        
+        Debug.Log("score "+endScore);
+        endScoreText.GetComponent<Text>().text += " "+endScore+"";
+
+        Time.timeScale = 0;
         ScoreManager.reset();
 
 
