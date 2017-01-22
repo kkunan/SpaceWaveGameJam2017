@@ -7,6 +7,7 @@ public class AsteroidScript : MonoBehaviour
     public float initialLife = 100f;
     public float healthBarXScaleAtMax = 100f;
     public Vector3 healthBarOffset = new Vector3(0, -20f, 0);
+
     public AudioClip explosion;
     public GameObject resources;
 
@@ -27,6 +28,10 @@ public class AsteroidScript : MonoBehaviour
     public Sprite crack2_2;
     public Sprite crack3_2;
 
+    public GameObject blast;
+
+    private Color[] colors;
+
     // Use this for initialization
     void Start()
     {
@@ -36,6 +41,12 @@ public class AsteroidScript : MonoBehaviour
         Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
         Vector2 position = gameObject.transform.position;
 
+        colors = new Color[]
+        {
+            Color.blue,
+            Color.red,
+            Color.green
+        };
 
         //random velocity
         // rb.AddForce(new Vector2(UnityEngine.Random.Range(-10,10), UnityEngine.Random.Range(-10,10)), ForceMode2D.Impulse);
@@ -91,10 +102,16 @@ public class AsteroidScript : MonoBehaviour
                 resource.GetComponent<Rigidbody2D>().AddForce(new Vector2(rb.velocity.x,rb.velocity.y).normalized*15);
             }
 
+            GameObject explode = (GameObject)Instantiate(blast, rb.position, rb.transform.rotation);
+
+            SpriteRenderer gameObjectRenderer = explode.GetComponent<SpriteRenderer>();
+            Color whateverColor = colors[asteroidType-1];
+            gameObjectRenderer.material.color = whateverColor;
+            
+
             Destroy(healthBar);
             Destroy(gameObject);
             
-
         }
 
     }
@@ -150,7 +167,7 @@ public class AsteroidScript : MonoBehaviour
             }
         }
 
-        Debug.Log(percent+" "+gameObjectRenderer.sprite);
+       // Debug.Log(percent+" "+gameObjectRenderer.sprite);
     }
 
 
