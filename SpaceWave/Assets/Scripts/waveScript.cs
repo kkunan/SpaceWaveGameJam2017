@@ -20,7 +20,7 @@ public class WaveScript : MonoBehaviour {
         ttl -= Time.deltaTime;
 	    if(ttl<0)
             Destroy(gameObject);
-        this.transform.localScale+=new Vector3(0.05f,0,0);
+        this.transform.localScale+=new Vector3(0.05f,0.02f,0.02f);
 
      //   Debug.Log("wave type inside wave" + waveType);
 
