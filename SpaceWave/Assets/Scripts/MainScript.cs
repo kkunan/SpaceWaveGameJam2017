@@ -19,6 +19,7 @@ public class MainScript : MonoBehaviour
 
     public GameObject MenuCanvas;
     public Canvas GameOverCanvas;
+    public GameObject endScoreText;
 
     public Image turnIndicator;
     public RawImage waveTypeIndicator;
@@ -45,6 +46,8 @@ public class MainScript : MonoBehaviour
     public Sprite asteroid2;
 
     private float redProb;
+
+
 
     // Use this for initialization
     void Start ()
@@ -268,6 +271,12 @@ public class MainScript : MonoBehaviour
     {
         
         GameOverCanvas.enabled = true;
+
+        int endScore = ScoreManager.score;
+        
+        Debug.Log("score "+endScore);
+        endScoreText.GetComponent<Text>().text += " "+endScore+"";
+
         Time.timeScale = 0;
         ScoreManager.reset();
 
