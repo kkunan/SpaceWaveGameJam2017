@@ -19,15 +19,24 @@ public class ReplayGameScript : MonoBehaviour
 
         Debug.Log(enabled);
 
+        if(MainScript.gameOver)
+        { 
         Color color = GetComponent<Image>().color;
         GetComponent<Image>().color = new Color(color.r, color.g, color.b, 0);
-
+        }
         SceneManager.LoadScene("test");
         Time.timeScale = 1;
 
         MainScript.gameOver = false;
         // Debug.Log(GameOverCanvas.GetComponent<Image>().color);
 
+    }
+
+    public void ReStart()
+    {
+        Debug.Log("Restart");
+        SceneManager.LoadScene("test");
+        Time.timeScale = 1;
     }
 
     public void Quit()
