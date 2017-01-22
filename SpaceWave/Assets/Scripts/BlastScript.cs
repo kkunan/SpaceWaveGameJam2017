@@ -5,6 +5,7 @@ public class BlastScript : MonoBehaviour {
 
 	// Use this for initialization
     private float ttl;
+    private float scaleSpeed = 5;
 	void Start ()
 	{
 
@@ -16,7 +17,7 @@ public class BlastScript : MonoBehaviour {
 	{
 
 	    ttl -= Time.deltaTime;
-        gameObject.transform.localScale += new Vector3(0.2f,0.2f,0.2f); 
+        gameObject.transform.localScale += Vector3.one*scaleSpeed*Time.deltaTime; 
 
         if(ttl<0)
             Destroy(gameObject);

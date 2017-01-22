@@ -17,6 +17,7 @@ public class MainScript : MonoBehaviour
 
     public Text timeValueText;
 
+    public GameObject MenuCanvas;
     public Canvas GameOverCanvas;
 
     public Image turnIndicator;
@@ -66,6 +67,7 @@ public class MainScript : MonoBehaviour
         waveTypeIndicator.color = colors[waveType];
 
         GameOverCanvas.enabled = false;
+        MenuCanvas.SetActive(false);
     }
 
     int waveTypeManager()
@@ -102,7 +104,12 @@ public class MainScript : MonoBehaviour
         
     }
 
-    
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+        MenuCanvas.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update ()
     {
@@ -110,7 +117,28 @@ public class MainScript : MonoBehaviour
         {
             return;
         }
-        
+
+        // pops up Menu Screen, hopefully
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (MenuCanvas.activeSelf)
+            {
+                Time.timeScale = 1;
+                MenuCanvas.SetActive(false);
+            }
+            else
+            {
+                Time.timeScale = 0;
+                MenuCanvas.SetActive(true);
+            }
+            
+            
+            Debug.Log("Escape!!!");
+        }
+
+        //if (MenuCanvas.activeSelf)
+        //    Time.timeScale = 0;
+        //else
         
         //turnText.text = String.Format("Turn {0:F} degs", station.transform.rotation.eulerAngles.z);
         turnIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, station.transform.rotation.eulerAngles.z);
@@ -240,7 +268,7 @@ public class MainScript : MonoBehaviour
     {
         
         GameOverCanvas.enabled = true;
-
+        Time.timeScale = 0;
         ScoreManager.reset();
 
 
